@@ -1,4 +1,8 @@
+import os
 from django.db import models
+
+def get_image_path(instance, filename):
+    return os.path.join('photos', str(instance.id), filename)
 
 class Cake(models.Model):
     cake_ID = models.AutoField(primary_key=True)
@@ -6,9 +10,9 @@ class Cake(models.Model):
     date_made = models.DateField(auto_now=True)
     descr = models.TextField(blank=True)
     cake_customer = models.CharField(max_length=100)
+    cake_picture = models.ImageField(upload_to=get_image_path, height_field=None, width_field=None, max_length=None, blank=True, null=True)
     def __str__(self):
-        return self.cake_name
-    
+        return self.cake_name 
 
 class Ingredient(models.Model):
     ingredient_id = models.AutoField(primary_key=True)
@@ -17,7 +21,6 @@ class Ingredient(models.Model):
     price_gram = models.DecimalField(max_digits=5, decimal_places=5)
     def __str__(self):
         return self.ingredient_name
-    
 
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True)
@@ -25,3 +28,6 @@ class Comment(models.Model):
     user = models.CharField(max_length=50)
     user_comment = models.TextField(blank=True)
     rating = models.IntegerField(default=5)
+    def __str__(self):
+        return self.user
+    
